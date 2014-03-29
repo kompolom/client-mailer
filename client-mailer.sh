@@ -3,7 +3,8 @@
 ########################
 # Defuaults            #
 ########################
-projectname=$0
+projectname=$1
+branch='master'
 
 if [ -e $projectname ];then
   echo "Не указано имя проекта"
@@ -41,4 +42,9 @@ function mkdir_if_not_exists(){
 mkdir_if_not_exists $yadiskProjectsDir
 
 #создаем папку проекта
-mkdir_if_not_exists $projectname
+#mkdir_if_not_exists $yadiskProjectsDir/$projectname
+
+#вытягиваем сборку из GIT
+echo "Создаем срез ветки $branch"
+echo `git describe $branch`
+git archive $branch --prefix="$projectname/" --format=zip > `git describe $branch`.zip
