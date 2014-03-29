@@ -9,7 +9,8 @@ FORMAT='zip'
 
 if [ -e $PROJECTNAME ];then
   echo "Не указано имя проекта"
-  exit 2
+  PROJECTNAME=`basename $PWD`
+  echo "Использую $PROJECTNAME как имя проекта"
 fi
 
 
@@ -64,6 +65,6 @@ mv $ARCHIVE_FILE $TARGET_CATALOG
 
 #Получаем ссылку на архив
 PUBLIC_LINK=`yandex-disk publish $TARGET_CATALOG/$ARCHIVE_FILE`
-echo "Ссылка на скачивание: $PUBLIC_LINK"
+echo -e "Ссылка на скачивание: \033[1m$PUBLIC_LINK\033[0m"
 exit 0
 
