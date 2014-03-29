@@ -1,6 +1,18 @@
 #!/bin/bash
 
 ########################
+# Defuaults            #
+########################
+projectname=$0
+
+if [ -e $projectname ];then
+  echo "Не указано имя проекта"
+  exit 2
+fi
+
+
+
+########################
 # Yandex.Disk          #
 ########################
 
@@ -27,3 +39,6 @@ function mkdir_if_not_exists(){
 
 #Создает папку проектов, если ее еще нет
 mkdir_if_not_exists $yadiskProjectsDir
+
+#создаем папку проекта
+mkdir_if_not_exists $projectname
