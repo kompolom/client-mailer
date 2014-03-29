@@ -9,7 +9,8 @@ FORMAT='zip'
 
 if [ -e $PROJECTNAME ];then
   echo "Не указано имя проекта"
-  exit 2
+  PROJECTNAME=`basename $PWD`
+  echo "Использую $PROJECTNAME как имя проекта"
 fi
 
 
