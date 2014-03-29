@@ -3,10 +3,11 @@
 ########################
 # Defuaults            #
 ########################
-projectname=$1
-branch='master'
+PROJECTNAME=$1
+BRANCH='master'
+FORMAT='zip'
 
-if [ -e $projectname ];then
+if [ -e $PROJECTNAME ];then
   echo "Не указано имя проекта"
   exit 2
 fi
@@ -32,9 +33,7 @@ function mkdir_if_not_exists(){
   dir=$1
   if ! [ -d $dir ]; then
     echo "Создаем каталог $dir"
-    if ! [ `mkdir $dir` ];then
-      exit 1
-    fi
+    mkdir $dir
   fi
 }
 
@@ -42,9 +41,29 @@ function mkdir_if_not_exists(){
 mkdir_if_not_exists $yadiskProjectsDir
 
 #создаем папку проекта
-#mkdir_if_not_exists $yadiskProjectsDir/$projectname
+TARGET_CATALOG=$yadiskProjectsDir/$PROJECTNAME
+mkdir_if_not_exists $TARGET_CATALOG
 
 #вытягиваем сборку из GIT
-echo "Создаем срез ветки $branch"
-echo `git describe $branch`
-git archive $branch --prefix="$projectname/" --format=zip > `git describe $branch`.zip
+echo "Создаем срез ветки $BRANCH"
+
+ARCHIVE_NAME=`git describe $BRANCH`
+ARCHIVE_FILE=$PROJECTNAME-$ARCHIVE_NAME.$FORMAT
+
+echo "Создаем $ARCHIVE_FILE..."
+git archive $BRANCH --prefix="$PROJECTNAME/" --format=zip > $ARCHIVE_FILE
+
+if ! [ -f $ARCHIVE_FILE ]; then
+  echo "Не удалось создать архив"
+  exit 3
+fi
+
+#Перемещаем файл в Яндекс-Диск
+echo "Перемещаем архив в Яндекс-диск"
+mv $ARCHIVE_FILE $TARGET_CATALOG 
+
+#Получаем ссылку на архив
+PUBLIC_LINK=`yandex-disk publish $TARGET_CATALOG/$ARCHIVE_FILE`
+echo "Ссылка на скачивание: $PUBLIC_LINK"
+exit 0
+
