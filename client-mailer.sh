@@ -3,8 +3,15 @@
 ########################
 # Yandex.Disk          #
 ########################
+
 yadiskDir=$HOME/Yandex.Disk
 yadiskProjectsDir=$yadiskDir/projects
+
+#Установлен ли яндекс-диск
+if [ -e yandex-disk ]; then
+  echo "yandex-disk не установлен"
+  exit 1
+fi
 
 echo "Каталог проектов: $yadiskProjectsDir"
 
